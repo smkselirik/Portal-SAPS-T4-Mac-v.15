@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Markah Peperiksaan - SMK Selirik 2026</title>
+    <style>
+        :root {
+            --exact-royal-blue: #4169E1;
+            --gold: #D4AF37;
+            --light-blue-1: #E3F2FD;
+            --light-blue-2: #BBDEFB;
+            --text-main: #333;
+            --btn-blue: #1976D2;
+            --btn-hover: #1565C0;
+            --danger: #D32F2F;
+            --warning: #F57C00;
+            --success: #2E7D32;
+            --gray: #607D8B;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--light-blue-1), var(--light-blue-2));
+            margin: 0;
+            padding: 0;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER DENGAN EXACT ROYAL BLUE & CORAK ABSTRAK GOLDEN */
+        header {
+            background-color: var(--exact-royal-blue);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.2) 0%, transparent 20%),
+                repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(212, 175, 55, 0.08) 15px, rgba(212, 175, 55, 0.08) 30px);
+            color: var(--gold);
+            text-align: center;
+            padding: 20px 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-bottom: 3px solid var(--gold);
+        }
+
+        header img { width: 85px; height: auto; margin-bottom: 10px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+        header h1 { margin: 0; font-size: 1.6rem; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; }
+        header h2 { margin: 5px 0 0 0; font-size: 1.1rem; font-weight: 400; color: #fff; }
+
+        main { flex: 1; padding: 15px; max-width: 900px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+
+        .card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        h3 { color: var(--exact-royal-blue); border-bottom: 2px solid var(--light-blue-2); padding-bottom: 10px; margin-top: 0; }
+
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; }
+        input[type="text"], select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 1rem; }
+
+        /* BUTANG */
+        button { background: var(--btn-blue); color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-size: 0.95rem; font-weight: bold; transition: 0.3s; }
+        button:hover { filter: brightness(0.9); }
+        .btn-block { width: 100%; margin-top: 10px; padding: 12px; }
+        .btn-success { background: var(--success); }
+        .btn-danger { background: var(--danger); }
+        .btn-warning { background: var(--warning); }
+        .btn-gray { background: var(--gray); }
+
+        /* SUSUNAN BUTANG NAVIGASI DI BAWAH */
+        .bottom-action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 25px;
+            border-top: 2px dashed #ccc;
+            padding-top: 20px;
+        }
+        .bottom-action-buttons .btn-simpan { grid-column: span 2; padding: 14px; font-size: 1.1rem; }
+
+        /* SENARAI PELAJAR - Strict Side-by-Side (Mobile & Desktop) */
+        .student-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 5px;
+            border-bottom: 1px solid #eee;
+            flex-wrap: nowrap; /* Memaksa supaya sentiasa sebaris */
+            overflow-x: auto; /* Membenarkan leret tepi jika skrin terlalu kecil */
+            gap: 8px;
+        }
+        .student-name {
+            flex-grow: 1;
+            font-weight: 600;
+            font-size: 0.85rem;
+            min-width: 130px; 
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0; 
+        }
+        .mark-input { width: 55px !important; text-align: center; padding: 8px !important; font-weight: bold; }
+        .grade-badge {
+            background: var(--light-blue-1); color: var(--exact-royal-blue); padding: 8px; 
+            border-radius: 6px; font-weight: bold; min-width: 32px; text-align: center; border: 1px solid var(--light-blue-2);
+        }
+        .btn-th { background: var(--danger); padding: 8px 10px; font-size: 0.8rem; }
+
+        /* DASHBOARD TABLE */
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; white-space: nowrap; }
+        th { background-color: var(--light-blue-1); color: var(--exact-royal-blue); }
+        .action-btns { display: flex; gap: 5px; }
+
+        footer { text-align: center; padding: 15px; background: var(--exact-royal-blue); color: #fff; font-size: 0.9rem; margin-top: auto; }
+        #loading { text-align: center; color: var(--exact-royal-blue); font-weight: bold; display: none; margin: 20px 0; font-size: 1.1rem; }
+        .hidden { display: none !important; }
+
+        /* Khusus Untuk Skrin Besar */
+        @media (min-width: 600px) {
+            .bottom-action-buttons { grid-template-columns: repeat(4, 1fr); }
+            .bottom-action-buttons .btn-simpan { grid-column: span 1; }
+            .student-name { font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="https://i.ibb.co/VYSKMXf1/Logo-Selirik.png" alt="Logo SMK Selirik">
+        <h1>SMK SELIRIK, KAPIT</h1>
+        <h2>Portal Peperiksaan Pertengahan 1 - Tahun 2026</h2>
+    </header>
+
+    <main>
+        <div id="login-section" class="card">
+            <h3>Log Masuk Guru</h3>
+            <div class="form-group">
+                <label>No. Kad Pengenalan:</label>
+                <input type="text" id="ic-input" placeholder="Contoh: 800101130101" pattern="\d*">
+            </div>
+            <button class="btn-block" onclick="semakIC()">Log Masuk</button>
+            <p id="login-error" style="color:red; display:none; margin-top:10px;">No. Kad Pengenalan tidak ditemui atau salah.</p>
+        </div>
+
+        <div id="selection-section" class="card hidden">
+            <h3 id="nama-guru-display">Selamat Datang</h3>
+            <div class="form-group">
+                <label>Pilih Subjek & Kelas:</label>
+                <select id="subject-select"></select>
+            </div>
+            <button class="btn-block" onclick="muatDataPelajar()">Papar Senarai Pelajar</button>
+            <button class="btn-danger btn-block" onclick="logKeluar()" style="margin-top: 15px;">Keluar Sistem</button>
+        </div>
+
+        <div id="loading">Memproses data dari pangkalan data... Sila tunggu sebentar.</div>
+
+        <div id="entry-section" class="card hidden">
+            <h3 id="current-class-display">Senarai Pelajar</h3>
+            
+            <div id="student-list"></div>
+
+            <div class="bottom-action-buttons">
+                <button class="btn-gray" onclick="kembaliKePilihan()">Kembali</button>
+                <button class="btn-warning" onclick="paparDashboard()">Semak Rekod</button>
+                <button class="btn-danger" onclick="logKeluar()">Keluar</button>
+                <button class="btn-success btn-simpan" onclick="simpanDanHantarSemua()">Simpan & Hantar</button>
+            </div>
+        </div>
+
+        <div id="dashboard-section" class="card hidden">
+            <h3>Semakan Rekod (LocalStorage)</h3>
+            <div class="table-responsive">
+                <table id="dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>Tarikh/Masa</th>
+                            <th>Pelajar</th>
+                            <th>Kelas</th>
+                            <th>Subjek</th>
+                            <th>Markah</th>
+                            <th>Gred</th>
+                            <th>Tindakan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </div>
+            
+            <div class="bottom-action-buttons" style="grid-template-columns: 1fr;">
+                <button class="btn-gray btn-block" onclick="kembaliKePilihan()">Kembali ke Pilihan Kelas</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        Hakcipta NDJE@Selirik, Kapit 2026
+    </footer>
+
+    <script>
+        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR831uDWcPfxf9zOj-mekolv_DMkdsYRMdVsxoLcKqwL88z-tetvP57ti5wB5M2dYIXYVZf9eX7R6Q8/pub?gid=1615224868&single=true&output=csv";
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbztn63Bhbjl6EKwvVFadcYNY3jzA0Nuty-_veEYQBkLenytXxQWZY5h7GweO3maDLn0/exec";
+
+        const mapKolum = {
+            "BAHASA MELAYU": 5, "BAHASA INGGERIS": 9, "SEJARAH": 7, "MATEMATIK": 11,
+            "PENDIDIKAN MORAL": 13, "PENDIDIKAN ISLAM": 15, "SAINS": 17, "SAINS KOMPUTER": 35,
+            "REKA CIPTA": 23, "PENDIDIKAN SENI VISUAL": 19, "KIMPALAN ARKA & GAS": 37,
+            "BIOLOGY": 31, "PHYSICS": 27, "CHEMISTRY": 29, "MATEMATIK TAMBAHAN": 33,
+            "BAHASA IBAN": 21, "PENGAJIAN PENIAGAAN": 25, "PENDIDIKAN JASMANI & KESIHATAN": 63
+        };
+
+        const dataGuru = {
+            "850805135684": { nama: "NATALIE DAMIE ANAK JACOB ENGGAH", subjek: ["BAHASA INGGERIS 4ST1", "BAHASA INGGERIS 4A2", "BAHASA INGGERIS 4A4"] },
+            "800530125085": { nama: "ARNOLD JUNIOR AUGUSTINE", subjek: ["BAHASA INGGERIS 4SN"] },
+            "860129525618": { nama: "RUNA ANAK SANGGONG", subjek: ["BAHASA INGGERIS 4KAG", "BAHASA INGGERIS 4ST2"] },
+            "981014135899": { nama: "GEORGE CHONG", subjek: ["BAHASA INGGERIS 4A3", "BAHASA INGGERIS 4ST3"] },
+            "980627135299": { nama: "DARREN GILBERT ANAK KOH", subjek: ["BAHASA INGGERIS 4A1"] },
+            "860805526983": { nama: "GRAY ANAK JOWIM@JOWIN", subjek: ["SEJARAH 4ST2", "SEJARAH 4A3", "SEJARAH 4A4"] },
+            "911129136097": { nama: "AQKMAL HAZIM BIN MUD", subjek: ["SEJARAH 4ST3", "SEJARAH 4A2"] },
+            "871226525496": { nama: "KAREN MAWAS ANAK ARAH", subjek: ["SEJARAH 4ST1", "SEJARAH 4KAG", "SEJARAH 4A1"] },
+            "900620137707": { nama: "YONG KASI SIONG", subjek: ["SEJARAH 4SN"] },
+            "800718135867": { nama: "KONG CHUNG SHING", subjek: ["SAINS 4ST3", "SAINS 4A4"] },
+            "861122135080": { nama: "ALEXANRA ANAK ANDREW KANA", subjek: ["MATEMATIK TAMBAHAN 4SN"] },
+            "920312135206": { nama: "ANDREA AK RIWIK", subjek: ["SAINS KOMPUTER 4SN"] },
+            "961130135644": { nama: "ATHIASIA ANAK ENJANG", subjek: ["BAHASA MELAYU 4A1", "BAHASA MELAYU 4A2"] },
+            "970825016670": { nama: "BRENDA AIMA ANAK JOSHUA MARIYAM", subjek: ["SAINS 4KAG", "SAINS 4ST1", "BIOLOGY 4SN"] },
+            "860116525619": { nama: "MOHD CABERINI BIN LINANG", subjek: ["PENDIDIKAN SENI VISUAL 4A1", "PENDIDIKAN SENI VISUAL 4A3"] },
+            "880504525432": { nama: "CECELIA ANAK JANES", subjek: ["PENGAJIAN PENIAGAAN 4ST1"] },
+            "920317036207": { nama: "CHE MOHD UDAIY BIN CHE ABDUL HADI", subjek: ["PHYSICS 4SN"] },
+            "930112135956": { nama: "CHRISTINA ADANG ANAK RAMA", subjek: ["BAHASA MELAYU 4SN", "BAHASA MELAYU 4A4"] },
+            "910722136085": { nama: "DESMOND ANAK LINGGI", subjek: ["BAHASA MELAYU 4KAG"] },
+            "840607135430": { nama: "DIANA ANAK LIMBI", subjek: ["SAINS 4A1", "SAINS 4ST2"] },
+            "990902135672": { nama: "ELLLSIE ANAK IRIN", subjek: ["REKA CIPTA 4ST2", "REKA CIPTA 4ST3"] },
+            "900811136926": { nama: "ENDON ANAK BAKAR", subjek: ["PENDIDIKAN MORAL 4ST1", "PENDIDIKAN MORAL 4A1", "PENDIDIKAN MORAL 4A4"] },
+            "010227130467": { nama: "GONZALES ANAK ABING", subjek: ["MATEMATIK 4SN", "MATEMATIK 4ST3", "MATEMATIK 4A1", "MATEMATIK 4A4", "MATEMATIK 4KAG"] },
+            "940628135710": { nama: "JACINTA ANAK BUDIT", subjek: ["SAINS 4A2"] },
+            "900219137495": { nama: "KENNY ANAK TAWAI", subjek: ["BAHASA MELAYU 4ST3"] },
+            "920826136695": { nama: "MOHAMAD ZAID BIN ZAIDI", subjek: ["KIMPALAN ARKA & GAS 4KAG"] },
+            "961018035889": { nama: "MOHAMAD FAZREEN BIN ZAINUDIN", subjek: ["PENDIDIKAN JASMANI & KESIHATAN 4ST2", "PENDIDIKAN JASMANI & KESIHATAN 4A4"] },
+            "790311135404": { nama: "NORA ANAK ENGKOL", subjek: ["BAHASA MELAYU 4ST2"] },
+            "930403135198": { nama: "NURUL SAMIZA BT ABANG", subjek: ["MATEMATIK 4ST1", "MATEMATIK 4A2", "MATEMATIK 4A3"] },
+            "840910135126": { nama: "SANTI ANAK THOMAS NANANG", subjek: ["BAHASA IBAN 4ST2"] },
+            "940318135694": { nama: "SIA KANG YEE", subjek: ["CHEMISTRY 4SN"] },
+            "941126135627": { nama: "STANLEY ANAK TUNGKU", subjek: ["PENDIDIKAN SENI VISUAL 4A2", "PENDIDIKAN SENI VISUAL 4A4"] },
+            "000628130602": { nama: "STEPHANIE ANAK HARWELL", subjek: ["PENDIDIKAN JASMANI & KESIHATAN 4A1", "PENDIDIKAN JASMANI & KESIHATAN 4KAG", "PENDIDIKAN MORAL 4ST3", "PENDIDIKAN MORAL 4A2", "PENDIIDKAN MORAL 4A3"] },
+            "910306135868": { nama: "STEPHANIE ANAK JUKY", subjek: ["SAINS 4A3"] },
+            "870404527095": { nama: "SYLVESTER ANAK ANTHONY GONG", subjek: ["REKA CIPTA 4ST1"] },
+            "930903136162": { nama: "TRACY DIANALEE ANAK MERANG", subjek: ["PENDIDIKAN MORAL 4SN", "PENDIDIKAN MORAL 4ST2", "PENDIDIKAN JASMANI & KESIHATAN 4ST3", "PENDIDIKAN JASMANI & KESIHATAN 4A3"] },
+            "730417055045": { nama: "WONG CHEE LOONG", subjek: ["MATEMATIK 4ST2"] },
+            "920820135958": { nama: "WONG CHU SING", subjek: ["BAHASA MELAYU 4ST1", "BAHASA MELAYU 4A3"] }
+        };
+
+        let currentGuru = null;
+        let currentSubjectFull = null;
+        let senaraiPelajarCSV = [];
+
+        // FUNGSI NAVIGASI
+        function hideAll() {
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('selection-section').classList.add('hidden');
+            document.getElementById('entry-section').classList.add('hidden');
+            document.getElementById('dashboard-section').classList.add('hidden');
+        }
+
+        function semakIC() {
+            const ic = document.getElementById('ic-input').value.trim();
+            if (dataGuru[ic]) {
+                currentGuru = dataGuru[ic];
+                document.getElementById('login-error').style.display = 'none';
+                document.getElementById('nama-guru-display').innerText = "Cikgu " + currentGuru.nama;
+                
+                const select = document.getElementById('subject-select');
+                select.innerHTML = "";
+                currentGuru.subjek.forEach(sub => { select.appendChild(new Option(sub, sub)); });
+                
+                hideAll();
+                document.getElementById('selection-section').classList.remove('hidden');
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+            }
+        }
+
+        function logKeluar() {
+            if(confirm("Adakah anda pasti mahu keluar? Data di peranti ini tetap selamat disimpan.")) {
+                currentGuru = null;
+                document.getElementById('ic-input').value = "";
+                hideAll();
+                document.getElementById('login-section').classList.remove('hidden');
+            }
+        }
+
+        function kembaliKePilihan() {
+            hideAll();
+            document.getElementById('selection-section').classList.remove('hidden');
+        }
+
+        function paparDashboard() {
+            hideAll();
+            renderDashboard();
+            document.getElementById('dashboard-section').classList.remove('hidden');
+        }
+
+        // FUNGSI DATA PELAJAR
+        async function muatDataPelajar() {
+            currentSubjectFull = document.getElementById('subject-select').value;
+            const namaKelas = currentSubjectFull.split(" ").pop();
+            
+            document.getElementById('loading').style.display = 'block';
+            hideAll();
+            
+            try {
+                const respons = await fetch(CSV_URL);
+                const teks = await respons.text();
+                const barisCSV = teks.split('\n').map(row => row.split(','));
+                
+                senaraiPelajarCSV = [];
+                for (let i = 1; i < barisCSV.length; i++) {
+                    if (barisCSV[i].length > 3) {
+                        let nama = barisCSV[i][2].replace(/["\r]/g, '').trim();
+                        let kelas = barisCSV[i][3].replace(/["\r]/g, '').trim();
+                        if (kelas === namaKelas) senaraiPelajarCSV.push({ nama, kelas });
+                    }
+                }
+                paparSenaraiPelajar(namaKelas);
+            } catch (err) {
+                alert("Ralat memuat turun data: " + err);
+                kembaliKePilihan();
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        function paparSenaraiPelajar(namaKelas) {
+            document.getElementById('current-class-display').innerText = currentSubjectFull;
+            const container = document.getElementById('student-list');
+            container.innerHTML = "";
+
+            if (senaraiPelajarCSV.length === 0) {
+                container.innerHTML = "<p>Tiada pelajar dijumpai untuk kelas " + namaKelas + ".</p>";
+            } else {
+                senaraiPelajarCSV.forEach((pelajar, index) => {
+                    const row = document.createElement('div');
+                    row.className = 'student-row';
+                    // Susunan Tetap: Nama | Input | Gred | TH Button
+                    row.innerHTML = `
+                        <div class="student-name" title="${pelajar.nama}">${index + 1}. ${pelajar.nama}</div>
+                        <div class="input-group">
+                            <input type="text" id="markah-${index}" class="mark-input" placeholder="0" oninput="kiraGred(${index})">
+                            <div class="grade-badge" id="gred-${index}">-</div>
+                            <button class="btn-th" onclick="setTH(${index})">TH</button>
+                        </div>
+                    `;
+                    container.appendChild(row);
+                });
+            }
+            document.getElementById('entry-section').classList.remove('hidden');
+        }
+
+        // LOGIK GRED & TH
+        function getGredValue(val) {
+            if (val === 'TH') return 'TH';
+            if (val === '') return '-';
+            let m = parseFloat(val);
+            if (isNaN(m)) return '-';
+            if (m >= 90) return 'A+'; if (m >= 80) return 'A'; if (m >= 70) return 'A-';
+            if (m >= 65) return 'B+'; if (m >= 60) return 'B'; if (m >= 55) return 'C+';
+            if (m >= 50) return 'C'; if (m >= 45) return 'D'; if (m >= 40) return 'E';
+            if (m >= 0 && m < 40) return 'G';
+            return '-';
+        }
+
+        function kiraGred(index) {
+            const val = document.getElementById(`markah-${index}`).value.trim().toUpperCase();
+            const gred = getGredValue(val);
+            document.getElementById(`gred-${index}`).innerText = gred;
+        }
+
+        function setTH(index) {
+            document.getElementById(`markah-${index}`).value = 'TH';
+            kiraGred(index);
+        }
+
+        // FUNGSI ENTER UNTUK FOKUS KE PELAJAR SETERUSNYA
+        document.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter' && document.activeElement.classList.contains('mark-input')) {
+                let currentId = document.activeElement.id;
+                let currentIndex = parseInt(currentId.split('-')[1]);
+                let nextIndex = currentIndex + 1;
+                
+                let nextInput = document.getElementById('markah-' + nextIndex);
+                
+                if (nextInput) {
+                    nextInput.focus();
+                } else {
+                    document.activeElement.blur(); // Buang fokus jika ini pelajar terakhir
+                }
+            }
+        });
+
+        // FUNGSI SIMPAN
+        async function simpanDanHantarSemua() {
+            const pecah = currentSubjectFull.split(" ");
+            const kelas = pecah.pop();
+            const subjekAsas = pecah.join(" ").trim();
+            const idKolum = mapKolum[subjekAsas];
+
+            if (!idKolum) return alert("Ralat Kolum: Subjek tidak dijumpai.");
+
+            let janjiPenghantaran = [];
+            let rekodTempatan = JSON.parse(localStorage.getItem('rekodMarkah')) || [];
+            let bilanganDihantar = 0;
+
+            for (let i = 0; i < senaraiPelajarCSV.length; i++) {
+                let markah = document.getElementById(`markah-${i}`).value.trim().toUpperCase();
+                let gred = document.getElementById(`gred-${i}`).innerText;
+
+                if (markah !== "") {
+                    let payload = { action: "simpan", nama: senaraiPelajarCSV[i].nama, kelas: kelas, markah: markah, gred: gred, kolum: idKolum };
+                    
+                    janjiPenghantaran.push(fetch(GAS_URL, {
+                        method: 'POST', mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    }));
+                    bilanganDihantar++;
+
+                    // Simpan data dalam localStorage
+                    let wujud = rekodTempatan.findIndex(r => r.nama === payload.nama && r.subjek === subjekAsas);
+                    let dataStoran = { masa: new Date().toLocaleString(), nama: payload.nama, kelas: payload.kelas, subjek: subjekAsas, markah: payload.markah, gred: payload.gred, kolumId: idKolum };
+                    
+                    if (wujud !== -1) rekodTempatan[wujud] = dataStoran;
+                    else rekodTempatan.push(dataStoran);
+                }
+            }
+
+            if (bilanganDihantar === 0) return alert("Sila isi sekurang-kurangnya satu markah sebelum menghantar.");
+
+            document.getElementById('loading').style.display = 'block';
+            await Promise.all(janjiPenghantaran);
+            
+            localStorage.setItem('rekodMarkah', JSON.stringify(rekodTempatan));
+            document.getElementById('loading').style.display = 'none';
+            alert("Berjaya! Markah telah dihantar ke pangkalan data Master.");
+            
+            paparDashboard();
+        }
+
+        // FUNGSI DASHBOARD (KEMASKINI & HAPUS BERFUNGSI SEPENUHNYA DENGAN GOOGLE SHEET)
+        function renderDashboard() {
+            const tbody = document.querySelector('#dashboard-table tbody');
+            tbody.innerHTML = "";
+            let rekodTempatan = JSON.parse(localStorage.getItem('rekodMarkah')) || [];
+            
+            if (rekodTempatan.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='7' style='text-align:center;'>Tiada rekod disimpan di peranti ini lagi.</td></tr>";
+                return;
+            }
+
+            rekodTempatan.reverse().forEach((rekod, idx) => {
+                let tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${rekod.masa}</td>
+                    <td>${rekod.nama}</td>
+                    <td>${rekod.kelas}</td>
+                    <td>${rekod.subjek}</td>
+                    <td><strong>${rekod.markah}</strong></td>
+                    <td><strong>${rekod.gred}</strong></td>
+                    <td class="action-btns">
+                        <button class="btn-warning" onclick="kemaskiniRekod(${idx})">Kemaskini</button>
+                        <button class="btn-danger" onclick="hapusRekod(${idx})">Hapus</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function kemaskiniRekod(idxReverse) {
+            let rekodTempatan = JSON.parse(localStorage.getItem('rekodMarkah')) || [];
+            let idxAsal = (rekodTempatan.length - 1) - idxReverse;
+            let rekod = rekodTempatan[idxAsal];
+
+            let markahBaru = prompt(`Kemaskini markah untuk ${rekod.nama} (${rekod.subjek}):\n(Taip 'TH' jika tidak hadir)`, rekod.markah);
+            
+            if (markahBaru !== null && markahBaru.trim() !== "") {
+                markahBaru = markahBaru.trim().toUpperCase();
+                let gredBaru = getGredValue(markahBaru);
+
+                document.getElementById('loading').style.display = 'block';
+                
+                // Hantar arahan kemaskini (simpan semula) ke Google Sheet
+                let payload = { action: "simpan", nama: rekod.nama, kelas: rekod.kelas, markah: markahBaru, gred: gredBaru, kolum: rekod.kolumId };
+                await fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+
+                // Kemaskini LocalStorage
+                rekodTempatan[idxAsal].markah = markahBaru;
+                rekodTempatan[idxAsal].gred = gredBaru;
+                rekodTempatan[idxAsal].masa = new Date().toLocaleString() + " (Dikemaskini)";
+                localStorage.setItem('rekodMarkah', JSON.stringify(rekodTempatan));
+                
+                document.getElementById('loading').style.display = 'none';
+                renderDashboard();
+            }
+        }
+
+        async function hapusRekod(idxReverse) {
+            if(confirm("AWAS! Rekod ini akan DIPADAM dari pangkalan data utama Google Sheet (MASTER) dan juga peranti ini. Teruskan?")) {
+                let rekodTempatan = JSON.parse(localStorage.getItem('rekodMarkah')) || [];
+                let idxAsal = (rekodTempatan.length - 1) - idxReverse;
+                let rekod = rekodTempatan[idxAsal];
+
+                document.getElementById('loading').style.display = 'block';
+
+                // Hantar arahan hapus secara khusus ke Google Sheet
+                let payload = { action: "hapus", nama: rekod.nama, kelas: rekod.kelas, kolum: rekod.kolumId };
+                await fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+
+                // Hapus dari LocalStorage
+                rekodTempatan.splice(idxAsal, 1);
+                localStorage.setItem('rekodMarkah', JSON.stringify(rekodTempatan));
+                
+                document.getElementById('loading').style.display = 'none';
+                renderDashboard();
+            }
+        }
+    </script>
+</body>
+</html>
