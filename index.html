@@ -6,7 +6,8 @@
     <title>Portal Markah Peperiksaan - SMK Selirik 2026</title>
     <style>
         :root {
-            --exact-royal-blue: #4169E1;
+            /* TEMA WARNA BARU */
+            --night-blue: #151B54;
             --gold: #D4AF37;
             --light-blue-1: #E3F2FD;
             --light-blue-2: #BBDEFB;
@@ -30,18 +31,28 @@
             flex-direction: column;
         }
 
-        /* HEADER DENGAN EXACT ROYAL BLUE & CORAK ABSTRAK GOLDEN */
+        /* HEADER DENGAN NIGHT BLUE & CORAK SPARKLING GOLDEN ABSTRACT */
         header {
-            background-color: var(--exact-royal-blue);
+            background-color: var(--night-blue);
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.15) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.2) 0%, transparent 20%),
-                repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(212, 175, 55, 0.08) 15px, rgba(212, 175, 55, 0.08) 30px);
+                /* Titik-titik bersinar (Sparkles) */
+                radial-gradient(circle at 15% 20%, rgba(212, 175, 55, 0.8) 1px, transparent 2px),
+                radial-gradient(circle at 85% 70%, rgba(212, 175, 55, 0.9) 1.5px, transparent 3px),
+                radial-gradient(circle at 50% 10%, rgba(212, 175, 55, 0.6) 1px, transparent 2px),
+                radial-gradient(circle at 75% 30%, rgba(212, 175, 55, 0.7) 2px, transparent 3px),
+                radial-gradient(circle at 25% 80%, rgba(212, 175, 55, 0.8) 1.5px, transparent 2.5px),
+                /* Garisan Abstrak Rapi */
+                repeating-linear-gradient(45deg, transparent, transparent 25px, rgba(212, 175, 55, 0.08) 25px, rgba(212, 175, 55, 0.08) 26px),
+                repeating-linear-gradient(-45deg, transparent, transparent 25px, rgba(212, 175, 55, 0.08) 25px, rgba(212, 175, 55, 0.08) 26px),
+                /* Cahaya Lembut (Glow) */
+                radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.15) 0%, transparent 40%);
             color: var(--gold);
             text-align: center;
             padding: 20px 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
             border-bottom: 3px solid var(--gold);
+            position: relative;
         }
 
         header img { width: 85px; height: auto; margin-bottom: 10px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
@@ -51,7 +62,7 @@
         main { flex: 1; padding: 15px; max-width: 900px; margin: 0 auto; width: 100%; box-sizing: border-box; }
 
         .card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        h3 { color: var(--exact-royal-blue); border-bottom: 2px solid var(--light-blue-2); padding-bottom: 10px; margin-top: 0; }
+        h3 { color: var(--night-blue); border-bottom: 2px solid var(--light-blue-2); padding-bottom: 10px; margin-top: 0; }
 
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: 600; }
@@ -66,16 +77,16 @@
         .btn-warning { background: var(--warning); }
         .btn-gray { background: var(--gray); }
 
-        /* SUSUNAN BUTANG NAVIGASI DI BAWAH */
+        /* SUSUNAN BARU BUTANG NAVIGASI DI BAWAH */
         .bottom-action-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            display: flex;
+            flex-direction: column; /* Tersusun ke bawah untuk peranti mudah alih */
+            gap: 12px;
             margin-top: 25px;
             border-top: 2px dashed #ccc;
             padding-top: 20px;
         }
-        .bottom-action-buttons .btn-simpan { grid-column: span 2; padding: 14px; font-size: 1.1rem; }
+        .bottom-action-buttons button { padding: 14px; font-size: 1.05rem; }
 
         /* SENARAI PELAJAR - Strict Side-by-Side (Mobile & Desktop) */
         .student-row {
@@ -84,8 +95,8 @@
             justify-content: space-between;
             padding: 10px 5px;
             border-bottom: 1px solid #eee;
-            flex-wrap: nowrap; /* Memaksa supaya sentiasa sebaris */
-            overflow-x: auto; /* Membenarkan leret tepi jika skrin terlalu kecil */
+            flex-wrap: nowrap; 
+            overflow-x: auto; 
             gap: 8px;
         }
         .student-name {
@@ -105,7 +116,7 @@
         }
         .mark-input { width: 55px !important; text-align: center; padding: 8px !important; font-weight: bold; }
         .grade-badge {
-            background: var(--light-blue-1); color: var(--exact-royal-blue); padding: 8px; 
+            background: var(--light-blue-1); color: var(--night-blue); padding: 8px; 
             border-radius: 6px; font-weight: bold; min-width: 32px; text-align: center; border: 1px solid var(--light-blue-2);
         }
         .btn-th { background: var(--danger); padding: 8px 10px; font-size: 0.8rem; }
@@ -114,17 +125,20 @@
         .table-responsive { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
         th, td { padding: 10px; border: 1px solid #ddd; text-align: left; white-space: nowrap; }
-        th { background-color: var(--light-blue-1); color: var(--exact-royal-blue); }
+        th { background-color: var(--light-blue-1); color: var(--night-blue); }
         .action-btns { display: flex; gap: 5px; }
 
-        footer { text-align: center; padding: 15px; background: var(--exact-royal-blue); color: #fff; font-size: 0.9rem; margin-top: auto; }
-        #loading { text-align: center; color: var(--exact-royal-blue); font-weight: bold; display: none; margin: 20px 0; font-size: 1.1rem; }
+        footer { text-align: center; padding: 15px; background: var(--night-blue); color: #fff; font-size: 0.9rem; margin-top: auto; }
+        #loading { text-align: center; color: var(--night-blue); font-weight: bold; display: none; margin: 20px 0; font-size: 1.1rem; }
         .hidden { display: none !important; }
 
-        /* Khusus Untuk Skrin Besar */
+        /* Khusus Untuk Skrin Besar (Laptop) */
         @media (min-width: 600px) {
-            .bottom-action-buttons { grid-template-columns: repeat(4, 1fr); }
-            .bottom-action-buttons .btn-simpan { grid-column: span 1; }
+            .bottom-action-buttons { 
+                flex-direction: row; /* Melintang sebaris untuk laptop */
+                justify-content: space-between; 
+            }
+            .bottom-action-buttons button { flex: 1; }
             .student-name { font-size: 0.95rem; }
         }
     </style>
@@ -142,7 +156,7 @@
             <h3>Log Masuk Guru</h3>
             <div class="form-group">
                 <label>No. Kad Pengenalan:</label>
-                <input type="text" id="ic-input" placeholder="Contoh: 800101130101" pattern="\d*">
+                <input type="text" id="ic-input" placeholder="Contoh: 850805135684" pattern="\d*">
             </div>
             <button class="btn-block" onclick="semakIC()">Log Masuk</button>
             <p id="login-error" style="color:red; display:none; margin-top:10px;">No. Kad Pengenalan tidak ditemui atau salah.</p>
@@ -167,9 +181,9 @@
 
             <div class="bottom-action-buttons">
                 <button class="btn-gray" onclick="kembaliKePilihan()">Kembali</button>
-                <button class="btn-warning" onclick="paparDashboard()">Semak Rekod</button>
+                <button class="btn-success" onclick="simpanDanHantarSemua()">Simpan & Hantar</button>
+                <button class="btn-warning" onclick="paparDashboard()">Semak Rekod Markah</button>
                 <button class="btn-danger" onclick="logKeluar()">Keluar</button>
-                <button class="btn-success btn-simpan" onclick="simpanDanHantarSemua()">Simpan & Hantar</button>
             </div>
         </div>
 
@@ -193,7 +207,7 @@
                 </table>
             </div>
             
-            <div class="bottom-action-buttons" style="grid-template-columns: 1fr;">
+            <div class="bottom-action-buttons" style="flex-direction: row;">
                 <button class="btn-gray btn-block" onclick="kembaliKePilihan()">Kembali ke Pilihan Kelas</button>
             </div>
         </div>
@@ -260,7 +274,6 @@
         let currentSubjectFull = null;
         let senaraiPelajarCSV = [];
 
-        // FUNGSI NAVIGASI
         function hideAll() {
             document.getElementById('login-section').classList.add('hidden');
             document.getElementById('selection-section').classList.add('hidden');
@@ -306,7 +319,6 @@
             document.getElementById('dashboard-section').classList.remove('hidden');
         }
 
-        // FUNGSI DATA PELAJAR
         async function muatDataPelajar() {
             currentSubjectFull = document.getElementById('subject-select').value;
             const namaKelas = currentSubjectFull.split(" ").pop();
@@ -347,7 +359,6 @@
                 senaraiPelajarCSV.forEach((pelajar, index) => {
                     const row = document.createElement('div');
                     row.className = 'student-row';
-                    // Susunan Tetap: Nama | Input | Gred | TH Button
                     row.innerHTML = `
                         <div class="student-name" title="${pelajar.nama}">${index + 1}. ${pelajar.nama}</div>
                         <div class="input-group">
@@ -362,7 +373,6 @@
             document.getElementById('entry-section').classList.remove('hidden');
         }
 
-        // LOGIK GRED & TH
         function getGredValue(val) {
             if (val === 'TH') return 'TH';
             if (val === '') return '-';
@@ -386,7 +396,6 @@
             kiraGred(index);
         }
 
-        // FUNGSI ENTER UNTUK FOKUS KE PELAJAR SETERUSNYA
         document.addEventListener('keyup', function(e) {
             if (e.key === 'Enter' && document.activeElement.classList.contains('mark-input')) {
                 let currentId = document.activeElement.id;
@@ -398,12 +407,11 @@
                 if (nextInput) {
                     nextInput.focus();
                 } else {
-                    document.activeElement.blur(); // Buang fokus jika ini pelajar terakhir
+                    document.activeElement.blur(); 
                 }
             }
         });
 
-        // FUNGSI SIMPAN
         async function simpanDanHantarSemua() {
             const pecah = currentSubjectFull.split(" ");
             const kelas = pecah.pop();
@@ -430,7 +438,6 @@
                     }));
                     bilanganDihantar++;
 
-                    // Simpan data dalam localStorage
                     let wujud = rekodTempatan.findIndex(r => r.nama === payload.nama && r.subjek === subjekAsas);
                     let dataStoran = { masa: new Date().toLocaleString(), nama: payload.nama, kelas: payload.kelas, subjek: subjekAsas, markah: payload.markah, gred: payload.gred, kolumId: idKolum };
                     
@@ -451,7 +458,6 @@
             paparDashboard();
         }
 
-        // FUNGSI DASHBOARD (KEMASKINI & HAPUS BERFUNGSI SEPENUHNYA DENGAN GOOGLE SHEET)
         function renderDashboard() {
             const tbody = document.querySelector('#dashboard-table tbody');
             tbody.innerHTML = "";
@@ -493,11 +499,9 @@
 
                 document.getElementById('loading').style.display = 'block';
                 
-                // Hantar arahan kemaskini (simpan semula) ke Google Sheet
                 let payload = { action: "simpan", nama: rekod.nama, kelas: rekod.kelas, markah: markahBaru, gred: gredBaru, kolum: rekod.kolumId };
                 await fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
 
-                // Kemaskini LocalStorage
                 rekodTempatan[idxAsal].markah = markahBaru;
                 rekodTempatan[idxAsal].gred = gredBaru;
                 rekodTempatan[idxAsal].masa = new Date().toLocaleString() + " (Dikemaskini)";
@@ -516,11 +520,9 @@
 
                 document.getElementById('loading').style.display = 'block';
 
-                // Hantar arahan hapus secara khusus ke Google Sheet
                 let payload = { action: "hapus", nama: rekod.nama, kelas: rekod.kelas, kolum: rekod.kolumId };
                 await fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
 
-                // Hapus dari LocalStorage
                 rekodTempatan.splice(idxAsal, 1);
                 localStorage.setItem('rekodMarkah', JSON.stringify(rekodTempatan));
                 
